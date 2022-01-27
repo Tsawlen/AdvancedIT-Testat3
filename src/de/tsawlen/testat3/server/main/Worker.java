@@ -1,4 +1,4 @@
-package de.testat3.server.main;
+package de.tsawlen.testat3.server.main;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -13,13 +13,12 @@ public class Worker extends Thread {
 	private DatagramSocket serverSocket;
 	private String path;
 	private QueueMonitor queue;
-	private Map<String, FileMonitor> monitor;
-	private FileMonitor currentMonitor;
+	private MonitorVault monitorVault;
 	
-	public Worker(DatagramSocket serverSocket, String path, Map<String, FileMonitor> monitor, QueueMonitor queue) {
+	public Worker(DatagramSocket serverSocket, String path, MonitorVault monitorVault, QueueMonitor queue) {
 		this.serverSocket = serverSocket;
 		this.path = path;
-		this.monitor = monitor;
+		this.monitorVault = monitorVault;
 		this.queue = queue;
 		
 	}
@@ -32,7 +31,6 @@ public class Worker extends Thread {
 			String response = "";
 			String msg = processDatagram(message);
 			MessageType msgType = decodeCommand(msg);
-			System.out.println("Worker " + this + " fängt an zu arbeiten!");
 			
 			if(msgType.equals(MessageType.READ)){
 				try {
@@ -44,6 +42,7 @@ public class Worker extends Thread {
 			}
 			else if(msgType.equals(MessageType.WRITE)) {
 				try {
+					
 					this.sleep(5000);
 				}catch(Exception e) {
 					e.printStackTrace();
@@ -101,19 +100,14 @@ public class Worker extends Thread {
 		if(commandSections[0] != null) {
 			String toRead = path + "/" + commandSections[0];
 			
-			if(monitor.keySet().contains(toRead)) {
-				currentMonitor = monitor.get(toRead);
-			}else {
-				currentMonitor = new FileMonitor();
-				monitor.put(toRead, currentMonitor);
-			}
-			
 			try {
 				if(commandSections[1] != null) {
 					int lineNo = Integer.parseInt(commandSections[1].trim());
-					currentMonitor.enterRead();
+					monitorVault.getAccess(toRead.trim()).enterRead();
+					System.out.println("Worker (Lesend) " + this + " fängt an zu arbeiten!");
 					toReturn = reader.readLine(toRead, lineNo);
-					currentMonitor.leaveReader();
+					System.out.println("Worker (Lesend) " + this + " hört auf zu arbeiten!");
+					monitorVault.getAccess(toRead.trim()).leaveReader();
 					return toReturn;
 				}
 				else {
@@ -135,21 +129,15 @@ public class Worker extends Thread {
 		if(commandSections[0] != null) {
 			String toRead = path + "/" + commandSections[0];
 			
-			if(monitor.keySet().contains(toRead)) {
-				currentMonitor = monitor.get(toRead);
-			}else {
-				currentMonitor = new FileMonitor();
-				monitor.put(toRead, currentMonitor);
-			}
-			
 			try {
 				if(commandSections[1] != null) {
 					int lineNo = Integer.parseInt(commandSections[1].trim());
 					if(commandSections[2] != null) {
-						
-						currentMonitor.enterWriter();
+						monitorVault.getAccess(toRead.trim()).enterWriter();
+						System.out.println("Worker (Schreibend) " + this + " fängt an zu arbeiten!");
 						toReturn = reader.writeLine(toRead.trim(), lineNo, commandSections[2].trim());
-						currentMonitor.leaveWriter();
+						System.out.println("Worker (Schreibend) " + this + " hört auf zu arbeiten!");
+						monitorVault.getAccess(toRead.trim()).leaveWriter();
 						return toReturn;
 					}
 					else {

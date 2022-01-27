@@ -1,4 +1,4 @@
-package de.testat3.server.main;
+package de.tsawlen.testat3.server.main;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -28,7 +28,7 @@ public class ServerDispatcher {
 		//Get the file path
 		String path = System.getProperty("user.home") + "/Desktop/Fileserver";
 		//Create a map that identifies monitors by their filename
-		Map<String, FileMonitor> monitor = new HashMap<>();
+		MonitorVault monitorVault = new MonitorVault();
 		//Create a Job queue
 		QueueMonitor queue = new QueueMonitor();
 		
@@ -41,7 +41,7 @@ public class ServerDispatcher {
 			
 			//Create and start all Workers
 			for(int i = 0; i <= 5; i++) {
-				Worker worker = new Worker(serverSocket, path, monitor, queue);
+				Worker worker = new Worker(serverSocket, path, monitorVault, queue);
 				worker.start();
 			}
 			

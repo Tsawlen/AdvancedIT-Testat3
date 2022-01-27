@@ -1,4 +1,4 @@
-package de.testat3.server.main;
+package de.tsawlen.testat3.server.main;
 
 public class FileMonitor {
 	
@@ -24,12 +24,8 @@ public class FileMonitor {
 			}
 		}
 		//decrement the waiting Writers
+		writerActive = true;
 		waitingWriter--;
-		//Look if writers are already active
-		if(runningWriter <= 0 ) {
-			//set active Writers to true - yes I know, it is pretty useless, but hey here it is :D
-			writerActive = true;
-		}
 		//Increment running writers - will only get to one, why did I do this? Well... I don't know!
 		runningWriter++;
 		

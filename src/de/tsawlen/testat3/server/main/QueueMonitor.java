@@ -1,4 +1,4 @@
-package de.testat3.server.main;
+package de.tsawlen.testat3.server.main;
 
 import java.net.DatagramPacket;
 import java.util.LinkedList;
