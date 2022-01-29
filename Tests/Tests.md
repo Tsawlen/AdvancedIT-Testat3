@@ -115,3 +115,127 @@ Worker (Lesend) Thread[Thread-5,5,main] hört auf zu arbeiten!
 ```
 #### Auswertung des 4. Testfalls
 Die Abarbeitungsreihenfolge zeigt, dass, obwohl die Schreiber-Aufträge nicht als erstes kommen, diese doch als erstes Abgearbeitet werden. Daraus ist zu schließen, dass die Schreiber-Priorität gewährleistet ist!
+### Testfall 5: Nebenläufiges Lesen und Schreiben aus unterschiedlichen Datein
+In diesem Testfall soll gezeigt werden, dass während nebenläufig aus einer Datei gelesen wird, ein anderer Worker in eine andere Datei schreiben kann. Hierfür sendet der Client folgendes:
+```java
+====================================================
+Starte Test zum parallelen Lesen aus einer Datei und schreiben in eine andere!
+Sende: READ secondTest.txt,2
+Sende: WRITE thirdTest.txt,3,Paralleler Zugriff
+Sende: READ secondTest.txt,5
+Empfangen: Neue Zeile in Zeile 5
+Empfangen: Überschrieben
+Empfangen: Test
+====================================================
+```
+Der Server reagiert wie folgt:
+```java
+Worker (Lesend) Thread[Thread-0,5,main] fängt an zu arbeiten!
+Worker (Schreibend) Thread[Thread-2,5,main] fängt an zu arbeiten!
+Worker (Lesend) Thread[Thread-1,5,main] fängt an zu arbeiten!
+Worker (Lesend) Thread[Thread-1,5,main] hört auf zu arbeiten!
+Worker (Schreibend) Thread[Thread-2,5,main] hört auf zu arbeiten!
+Worker (Lesend) Thread[Thread-0,5,main] hört auf zu arbeiten!
+```
+#### Auswertung des 5. Testfalls
+Dies zeigt erneut, dass jede Datei ihren eigenen Monitor hat und demnach nebenläufige Zugriffe auf unterschiedliche Datein zumeist möglich sind.
+### Testfall 6: Mehr Aufträge als verfügbare Worker
+In diesem Test soll gezeigt werden, wie der Server auf mehr eingehende Aufträge reagiert als dieser Worker hat. Hierfür sendet der Client folgendes:
+```java
+====================================================
+Starte Test mit mehr Anfragen als aktive Worker
+Sende: READ secondTest.txt,2
+Sende: READ secondTest.txt,3
+Sende: READ secondTest.txt,4
+Sende: READ secondTest.txt,5
+Sende: READ secondTest.txt,6
+Sende: READ secondTest.txt,7
+Sende: READ secondTest.txt,8
+Sende: READ secondTest.txt,9
+Sende: READ secondTest.txt,10
+Sende: READ secondTest.txt,11
+Sende: READ secondTest.txt,12
+Sende: READ secondTest.txt,13
+Empfangen: You were expecting the sixth row, but it was me! DIO!
+Empfangen: ersetzte Zeile
+Empfangen: Neue Zeile 1
+Empfangen: Eingefügte Zeile
+Empfangen: Test
+Empfangen: Neue Zeile in Zeile 5
+Empfangen: null
+Empfangen: neue Zeile Test
+Empfangen: Zeile vor der neuen Zeile
+Empfangen: neue Zeile
+Empfangen: 
+Empfangen: null
+====================================================
+```
+Der Server regiert auf diese Anfrage wie folgt:
+```java
+Worker (Lesend) Thread[Thread-1,5,main] fängt an zu arbeiten!
+Worker (Lesend) Thread[Thread-2,5,main] fängt an zu arbeiten!
+Worker (Lesend) Thread[Thread-4,5,main] fängt an zu arbeiten!
+Worker (Lesend) Thread[Thread-5,5,main] fängt an zu arbeiten!
+Worker (Lesend) Thread[Thread-0,5,main] fängt an zu arbeiten!
+Worker (Lesend) Thread[Thread-3,5,main] fängt an zu arbeiten!
+Worker (Lesend) Thread[Thread-4,5,main] hört auf zu arbeiten!
+Worker (Lesend) Thread[Thread-0,5,main] hört auf zu arbeiten!
+Worker (Lesend) Thread[Thread-1,5,main] hört auf zu arbeiten!
+Worker (Lesend) Thread[Thread-3,5,main] hört auf zu arbeiten!
+Worker (Lesend) Thread[Thread-5,5,main] hört auf zu arbeiten!
+Worker (Lesend) Thread[Thread-2,5,main] hört auf zu arbeiten!
+Worker (Lesend) Thread[Thread-3,5,main] fängt an zu arbeiten!
+Worker (Lesend) Thread[Thread-4,5,main] fängt an zu arbeiten!
+Worker (Lesend) Thread[Thread-5,5,main] fängt an zu arbeiten!
+Worker (Lesend) Thread[Thread-2,5,main] fängt an zu arbeiten!
+Worker (Lesend) Thread[Thread-1,5,main] fängt an zu arbeiten!
+Worker (Lesend) Thread[Thread-0,5,main] fängt an zu arbeiten!
+Worker (Lesend) Thread[Thread-5,5,main] hört auf zu arbeiten!
+Worker (Lesend) Thread[Thread-3,5,main] hört auf zu arbeiten!
+Worker (Lesend) Thread[Thread-2,5,main] hört auf zu arbeiten!
+Worker (Lesend) Thread[Thread-0,5,main] hört auf zu arbeiten!
+Worker (Lesend) Thread[Thread-4,5,main] hört auf zu arbeiten!
+Worker (Lesend) Thread[Thread-1,5,main] hört auf zu arbeiten!
+```
+#### Auswertung des 6. Testfalls
+Dieser Testfall sollte selber ausgeführt werden, da man nur dann die Zeitverzögerte Reaktion des Servers sieht und wie die Worker auf die Warteschlange zugreifen.
+### Testfall 7: Nebenläufiges Lesen aus unterschiedlichen Datein
+Dieser Testfall soll das Verhalten des Servers darauf zeigen, wenn dieser aus unterschiedlichen Datein nebenläufig lesen soll. Hierfür sendet der Client folgendes:
+```java
+====================================================
+Starte Test zum lesen aus verschiedenen Datein
+Sende: READ secondTest.txt,2
+Sende: READ thirdTest.txt,3
+Sende: READ secondTest.txt,5
+Empfangen: Paralleler Zugriff
+Empfangen: Test
+Empfangen: Neue Zeile in Zeile 5
+====================================================
+```
+Hier reagiert der Server wie folgt:
+```java
+Worker (Lesend) Thread[Thread-5,5,main] fängt an zu arbeiten!
+Worker (Lesend) Thread[Thread-0,5,main] fängt an zu arbeiten!
+Worker (Lesend) Thread[Thread-4,5,main] fängt an zu arbeiten!
+Worker (Lesend) Thread[Thread-4,5,main] hört auf zu arbeiten!
+Worker (Lesend) Thread[Thread-5,5,main] hört auf zu arbeiten!
+Worker (Lesend) Thread[Thread-0,5,main] hört auf zu arbeiten!
+```
+#### Auswertung des 7. Testfalls
+Dies zeigt wie Testfall 5, dass nebenläufige Lesezugriffe immer möglich sind!
+### Testfall 8: Eine Zeile lesen, welche nicht existiert
+Dieser Test soll zeigen, wie der Server reagiert, wenn dieser eine Zeile lesen soll, welche nicht in dem Dokument vorhanden ist. Hierfür sendet der Server folgendes:
+```java
+====================================================
+Starte Test zum lesen einer nicht vorhandenen Zeile!
+Sende: READ secondTest.txt,50
+Empfangen: Line does not exist!
+====================================================
+```
+Der Server reagiert wie folgt:
+```java
+Worker (Lesend) Thread[Thread-2,5,main] fängt an zu arbeiten!
+Worker (Lesend) Thread[Thread-2,5,main] hört auf zu arbeiten!
+```
+#### auswertung des 8. Testfalls
+Dies zeigt, dass der Server nicht abstürzt sondern einfach einen Fehler zurückgibt.

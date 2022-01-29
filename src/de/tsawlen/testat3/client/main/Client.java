@@ -304,14 +304,14 @@ public class Client extends Thread {
 		//if the running mode is automatic start all tests
 		case 2:
 			Client autoTest = new Client(3);
-			//autoTest.automaticTestParallelReading();
-			//autoTest.automaticTestSequentiellWritingInSameDocument();
-			//autoTest.automaticTestParallelWritingInDifferentDocument();
+			autoTest.automaticTestParallelReading();
+			autoTest.automaticTestSequentiellWritingInSameDocument();
+			autoTest.automaticTestParallelWritingInDifferentDocument();
 			autoTest.automaticTestWriterPriority();
-			//autoTest.automaticReadAndWriteDifferentFiles();
-			//autoTest.automaticTestMoreRequestsThanWorker();
-			//autoTest.automaticTestReadFromDifferentFiles();
-			//autoTest.automaticTestReadOutOfBounds();
+			autoTest.automaticReadAndWriteDifferentFiles();
+			autoTest.automaticTestMoreRequestsThanWorker();
+			autoTest.automaticTestReadFromDifferentFiles();
+			autoTest.automaticTestReadOutOfBounds();
 			System.out.println("====================================================");
 			System.out.println("Alle Tests erfolgreich abgeschlossen!");
 			break;
