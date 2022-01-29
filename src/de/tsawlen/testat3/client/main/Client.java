@@ -182,6 +182,10 @@ public class Client extends Thread {
 		sendTest(commands);	
 	}
 	
+	/**
+	 * This method is responsible for testing the error handling of the fileserver! 
+	 * Therefore a lot of wrong commands are being created in this method
+	 */
 	public void automaticTestErrorHandling() {
 		System.out.println("====================================================");
 		System.out.println("Starte Test zum Error Handling!");
