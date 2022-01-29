@@ -10,6 +10,9 @@ Bitte wählen sie einen Modus >
 ```
 Hier muss nur die entsprechende Zahl eingegeben werden, um den entsprechenden Modus zu starten.
 
+### Auswertung des automatischen Clients
+Um den automatischen Client auszuführen, verwenden sie bitte die Datein aus dem Ordner "Testdatein", da die automatischen Tests auf diese Datein ausgelegt sind.
+
 ## Tests
 ### Testfall 1: Paralleles Lesen aus der gleichen Datein
 In diesem Testfall soll geprüft werden, ob der Server nebenläufig aus der gleichen Datei lesen kann. Hierfür wird folgendes vom Client geschickt und empfangen:
