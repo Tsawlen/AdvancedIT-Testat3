@@ -242,3 +242,27 @@ Worker (Lesend) Thread[Thread-2,5,main] hört auf zu arbeiten!
 ```
 #### auswertung des 8. Testfalls
 Dies zeigt, dass der Server nicht abstürzt sondern einfach einen Fehler zurückgibt.
+### Testfall 9: Verschiedene Falsche Kommandos
+In diesem Testfall soll die Reaktion des Servers auf verschiedene Fehlerhafte Kommandos gezeigt werden. Hierfür sendet der Client folgende Kommandos und bekommt folgende Reaktionen:
+```java
+====================================================
+Starte Test zum Error Handling!
+Sende: READ secondTest.txt
+Sende: RED secondTest.txt,2
+Sende: WITE secondTest.txt,2,Hallo
+Sende: WRITE secondTest,2,Hallo
+Sende: WRITE secondTest.txt
+Sende: WRITE secondTest.txt,2
+Empfangen: STATUS 404: Command not found! Command was RED
+Empfangen: STATUS 404: Command not found! Command was WITE
+Empfangen: Invalid command, the Data is missing!
+Empfangen: Invalid command, line Number missing!
+Empfangen: Internal Server Error!
+Empfangen: The file does not exists!
+====================================================
+```
+#### Auswertung des 9. Testfalls
+Dieser Test zeigt, dass der Server bei den meisten falschen Kommandos eine passende Fehlerbeschreibung schickt und bei keinem der Fehler abstürzt, sonder lediglich eine Fehlernachricht schickt!
+
+## Auswertung
+Mit all diesen Testfällen sollte bewiesen sein, dass dieser Server seine Aufgabe mit gegebenen Anforderungen erfüllen kann!

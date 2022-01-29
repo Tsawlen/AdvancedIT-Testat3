@@ -68,7 +68,7 @@ public class Worker extends Thread {
 				response = write(msg, path);
 			}else {
 				//respond error if the command is unknown
-				response = "STATUS 404: Command not found!";
+				response = "STATUS 404: Command not found! Command was " + msg.split(" ")[0];
 			}
 			//if there is a response
 			if(response != null) {
@@ -133,7 +133,7 @@ public class Worker extends Thread {
 			
 			try {
 				//look if a line number is given
-				if(commandSections[1] != null) {
+				if(commandSections.length > 0) {
 					//get the line number from the string
 					int lineNo = Integer.parseInt(commandSections[1].trim());
 					//get the monitor for the given file and then enter the Read section of that
@@ -145,8 +145,7 @@ public class Worker extends Thread {
 					//get the monitor for the given file and exit the leave section of it
 					monitorVault.getAccess(toRead.trim()).leaveReader();
 					return toReturn;
-				}
-				else {
+				} else {
 					//return exception
 					return "Invalid command, line Number missing!";
 				}
@@ -172,17 +171,17 @@ public class Worker extends Thread {
 		String toReturn = "";
 		
 		//look if a filename is available
-		if(commandSections[0] != null) {
+		if(commandSections.length >= 1) {
 			//build the path to the requested file
 			String toRead = path + "/" + commandSections[0];
 			
 			try {
 				//look if a line number is available
-				if(commandSections[1] != null) {
+				if(commandSections.length >= 2) {
 					//get the line number as an integer
 					int lineNo = Integer.parseInt(commandSections[1].trim());
 					//look if data is available
-					if(commandSections[2] != null) {
+					if(commandSections.length >= 3) {
 						//get the monitor for the given file and enter the write section
 						monitorVault.getAccess(toRead.trim()).enterWriter();
 						System.out.println("Worker (Schreibend) " + this + " fängt an zu arbeiten!");

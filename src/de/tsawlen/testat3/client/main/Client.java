@@ -182,6 +182,19 @@ public class Client extends Thread {
 		sendTest(commands);	
 	}
 	
+	public void automaticTestErrorHandling() {
+		System.out.println("====================================================");
+		System.out.println("Starte Test zum Error Handling!");
+		List<String> commands = new ArrayList();
+		commands.add("READ secondTest.txt");
+		commands.add("RED secondTest.txt,2");
+		commands.add("WITE secondTest.txt,2,Hallo");
+		commands.add("WRITE secondTest,2,Hallo");
+		commands.add("WRITE secondTest.txt");
+		commands.add("WRITE secondTest.txt,2");
+		sendTest(commands);	
+	}
+	
 	/**
 	 * This method is responsible for sending all tests and receiving their answers
 	 * @param commands
@@ -312,6 +325,7 @@ public class Client extends Thread {
 			autoTest.automaticTestMoreRequestsThanWorker();
 			autoTest.automaticTestReadFromDifferentFiles();
 			autoTest.automaticTestReadOutOfBounds();
+			autoTest.automaticTestErrorHandling();
 			System.out.println("====================================================");
 			System.out.println("Alle Tests erfolgreich abgeschlossen!");
 			break;
